@@ -5,25 +5,37 @@ const {
   getTaskValidator,
   updateTaskValidator,
   deleteTaskValidator,
+  getFilteredTasksValidator,
+  getTasksByPriorityValidator,
 } = require("../validators/tasks");
 
 const validateInput = require("../middlewares/validateInput");
 
-tasks.get("/", (req, res) => {
-  const allTasks = taskService.getAll();
+tasks.get("/", [ getFilteredTasksValidator, validateInput ], (req, res) => {
+  let tasks = [];
 
-  return res.status(200).json(allTasks);
+  if (req.query && typeof req.query.status === "boolean") {
+    tasks = taskService.getFilteredByStatus(req.query.status);
+  } else {
+    tasks = taskService.getAll();
+  }
+
+  return res.status(200).json(tasks);
 });
 
 tasks.post("/", [ createTaskValidator, validateInput ], (req, res) => {
   const {
     title,
-    description
+    description,
+    completed,
+    priority,
   } = req.body;
 
   taskService.create({
     title,
     description,
+    completed: !!completed,
+    priority,
   });
 
   return res.status(201).send({
@@ -85,6 +97,12 @@ tasks.delete("/:id", [ deleteTaskValidator, validateInput ], (req, res) => {
     status: true,
     message: "Task deleted successfully",
   });
+});
+
+tasks.get("/priority/:level", [ getTasksByPriorityValidator, validateInput ], (req, res) => {
+  const level = req.params.level;
+  const tasks = taskService.getFilteredTasksByPriority(level);
+  return res.status(200).json(tasks);
 });
 
 module.exports = tasks;

@@ -1,14 +1,21 @@
 const globalTasks = require("../task.json");
-module.exports = {
-  // tasks: [{"id":1,"title":"New Task 2","description":"New Description 2","completed":false},{"id":2,"title":"New Task","description":"New Description","completed":false}],
 
+module.exports = {
   tasks: globalTasks.tasks,
 
   getAll() {
     return this.tasks;
   },
 
-  create({ title, description }) {
+  getFilteredByStatus(status) {
+    return this.tasks.filter(task => task.completed === status);
+  },
+
+  getFilteredTasksByPriority(level) {
+    return this.tasks.filter(task => task.priority && task.priority === level);
+  },
+
+  create({ title, description, completed, priority }) {
     let id;
     
     if (this.tasks.length) {
@@ -21,7 +28,8 @@ module.exports = {
       id,
       title,
       description,
-      completed: false,
+      completed,
+      priority: priority || "low",
     });
   },
 
@@ -35,7 +43,7 @@ module.exports = {
 
   update(index, body) {
     for (const key in body) {
-      if (key in ["title", "description", "completed"]) {
+      if (key in ["title", "description", "completed", "priority"]) {
         this.tasks[index][key] = body[key];
       }
     }

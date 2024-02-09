@@ -1,4 +1,12 @@
-const { body, param } = require("express-validator");
+const { body, param, query } = require("express-validator");
+
+const getFilteredTasksValidator = [
+  query("status")
+    .optional()
+    .isBoolean()
+    .withMessage("status can only be boolean value")
+    .toBoolean(),
+];
 
 const createTaskValidator = [
   body("title")
@@ -12,6 +20,16 @@ const createTaskValidator = [
     .withMessage("description can't be empty")
     .isString()
     .withMessage("description can only be a string value")
+    .trim(),
+  body("completed")
+    .optional()
+    .isBoolean()
+    .withMessage("completed can only be a boolean value")
+    .toBoolean(),
+  body("priority")
+    .optional()
+    .isIn(["low", "medium", "high"])
+    .withMessage("invalid priority")
     .trim(),
 ];
 
@@ -42,6 +60,11 @@ const updateTaskValidator = [
     .isBoolean()
     .withMessage("completed can only be a boolean value")
     .toBoolean(),
+  body("priority")
+    .optional()
+    .isIn(["low", "medium", "high"])
+    .withMessage("invalid priority")
+    .trim(),
 ];
 
 const deleteTaskValidator = [
@@ -51,9 +74,17 @@ const deleteTaskValidator = [
     .toInt()
 ];
 
+const getTasksByPriorityValidator = [
+  param("level")
+  .isIn(["low", "medium", "high"])
+  .withMessage("invalid priority"),
+];
+
 module.exports = {
   createTaskValidator,
   getTaskValidator,
   updateTaskValidator,
-  deleteTaskValidator
+  deleteTaskValidator,
+  getFilteredTasksValidator,
+  getTasksByPriorityValidator,
 };
