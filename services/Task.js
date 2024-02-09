@@ -1,14 +1,24 @@
 const globalTasks = require("../task.json");
 
+
+
 module.exports = {
   tasks: globalTasks.tasks,
 
-  getAll() {
-    return this.tasks;
+  getAll(sort) {
+    if (sort === "desc") {
+      return this.tasks.sort((taskA, taskB) => taskB.id - taskA.id);
+    }
+      
+    return this.tasks.sort((taskA, taskB) => taskA.id - taskB.id);
   },
 
-  getFilteredByStatus(status) {
-    return this.tasks.filter(task => task.completed === status);
+  getFilteredByStatus(status, sort) {
+    if (sort === "desc") {
+      return this.tasks.sort((taskA, taskB) => taskB.id - taskA.id).filter(task => task.completed === status);
+    }
+    
+    return this.tasks.sort((taskA, taskB) => taskA.id - taskB.id).filter(task => task.completed === status);
   },
 
   getFilteredTasksByPriority(level) {

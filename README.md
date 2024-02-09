@@ -13,8 +13,9 @@ This repository consists of an API for a typical task manager or to-do app. It's
 - `npm run test` 
 
 ### Routes:
-- GET /tasks - Get All Tasks
+- GET /tasks - Get All Tasks - It also allows filter `status=true/false` and `sort=asc/desc`
 - GET /tasks/:id - Get Task By Id
+- GET /tasks/priority/:level - Get task with a particular priority
 - POST /tasks - Create New Task
 - PUT /tasks/:id - Update existing task by id
 - DELETE /tasks/:id - Delete  existing task

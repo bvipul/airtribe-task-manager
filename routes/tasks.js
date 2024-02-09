@@ -13,11 +13,12 @@ const validateInput = require("../middlewares/validateInput");
 
 tasks.get("/", [ getFilteredTasksValidator, validateInput ], (req, res) => {
   let tasks = [];
+  const sort = req.query.sort || "asc";
 
   if (req.query && typeof req.query.status === "boolean") {
-    tasks = taskService.getFilteredByStatus(req.query.status);
+    tasks = taskService.getFilteredByStatus(req.query.status, sort);
   } else {
-    tasks = taskService.getAll();
+    tasks = taskService.getAll(sort);
   }
 
   return res.status(200).json(tasks);

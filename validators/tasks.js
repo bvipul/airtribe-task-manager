@@ -6,6 +6,10 @@ const getFilteredTasksValidator = [
     .isBoolean()
     .withMessage("status can only be boolean value")
     .toBoolean(),
+  query("sort")
+    .optional()
+    .isIn(["asc", "desc"])
+    .withMessage("invalid sort value"),
 ];
 
 const createTaskValidator = [
