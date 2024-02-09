@@ -81,7 +81,7 @@ tap.test("PUT /tasks/:id with invalid id", async (t) => {
 tap.test("PUT /tasks/:id with invalid data", async (t) => {
   const updatedTask = {
     title: "Updated Task",
-    description: "Updated Task Description",
+    description: true,
     completed: "true",
   };
   const response = await server.put("/tasks/1").send(updatedTask);
